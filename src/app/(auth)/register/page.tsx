@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { RegisterForm } from "@/components/auth/register-form";
 
 export const metadata: Metadata = {
   title: "Crear Cuenta — Finanzas",
@@ -13,10 +15,15 @@ export default function RegisterPage() {
           Registrate para empezar a organizar tus finanzas
         </p>
       </div>
-      {/* Register form will be implemented in PR 3 (Auth) */}
-      <div className="rounded-md border border-dashed p-8 text-center text-sm text-muted-foreground">
-        Formulario de registro — próximamente
-      </div>
+
+      <RegisterForm />
+
+      <p className="text-center text-sm text-muted-foreground">
+        ¿Ya tenés cuenta?{" "}
+        <Link href="/login" className="text-primary hover:underline">
+          Iniciar Sesión
+        </Link>
+      </p>
     </div>
   );
 }
