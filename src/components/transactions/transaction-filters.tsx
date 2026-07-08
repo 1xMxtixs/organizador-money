@@ -41,8 +41,8 @@ export function TransactionFilters({
   filters,
   onChange,
 }: TransactionFiltersProps) {
-  const update = (key: string, value: string) => {
-    onChange({ ...filters, [key]: value || undefined });
+  const update = (key: string, value: string | null) => {
+    onChange({ ...filters, [key]: value && value !== "__all__" ? value : undefined });
   };
 
   return (

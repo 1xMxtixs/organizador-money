@@ -160,7 +160,10 @@ export function TransactionForm({
 
           <div className="space-y-2">
             <Label>Cuenta</Label>
-            <Select value={accountId} onValueChange={setAccountId}>
+            <Select
+              value={accountId}
+              onValueChange={(v) => setAccountId(v ?? "")}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Seleccionar cuenta" />
               </SelectTrigger>
@@ -179,7 +182,7 @@ export function TransactionForm({
 
           <div className="space-y-2">
             <Label>Categoría (opcional)</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Select value={categoryId} onValueChange={(v) => setCategoryId(v ?? "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Sin categoría" />
               </SelectTrigger>

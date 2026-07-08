@@ -16,8 +16,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
   const { id } = await params;
 
   try {
+    // Soft-delete extension auto-filters deletedAt
     const transaction = await prisma.transaction.findFirst({
-      where: { id, deletedAt: null } as never,
+      where: { id },
       include: {
         account: { select: { id: true, name: true, currencyCode: true } },
         category: { select: { id: true, name: true, icon: true, color: true } },
@@ -59,7 +60,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const existing = await prisma.transaction.findFirst({
-      where: { id, deletedAt: null } as never,
+      where: { id },
     });
 
     if (!existing) {
@@ -118,7 +119,7 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
 
   try {
     const existing = await prisma.transaction.findFirst({
-      where: { id, deletedAt: null } as never,
+      where: { id },
     });
 
     if (!existing) {
@@ -135,32 +136,27 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
 
     const amount = Number(existing.amount);
 
-    await prisma.$transaction([
-      prisma.transaction.delete({ where: { id } }),
-      // Reverse the balance change
-      prisma.account.update({
-        where: { id: existing.accountId },
-        data: { balance: { decrement: amount } },
-      }),
-      // If it's a transfer, also reverse the paired record
-      ...(existing.transferPairId
-        ? [
-            prisma.transaction.findFirst({
-              where: { id: existing.transferPairId } as never,
-            }).then((paired) => {
-              if (paired) {
-                return prisma.$transaction([
-                  prisma.transaction.delete({ where: { id: paired.id } }),
-                  prisma.account.update({
-                    where: { id: paired.accountId },
-                    data: { balance: { decrement: Number(paired.amount) } },
-                  }),
-                ]);
-              }
-            }),
-          ]
-        : []),
-    ]);
+    await prisma.transaction.delete({ where: { id } });
+
+    // Reverse the balance change
+    await prisma.account.update({
+      where: { id: existing.accountId },
+      data: { balance: { decrement: amount } },
+    });
+
+    // If it's a transfer, also soft-delete the paired record
+    if (existing.transferPairId) {
+      const paired = await prisma.transaction.findFirst({
+        where: { id: existing.transferPairId },
+      });
+      if (paired) {
+        await prisma.transaction.delete({ where: { id: paired.id } });
+        await prisma.account.update({
+          where: { id: paired.accountId },
+          data: { balance: { decrement: Number(paired.amount) } },
+        });
+      }
+    }
 
     return apiSuccess({ message: "Transacción eliminada" });
   } catch {
@@ -177,10 +173,12 @@ export async function POST(request: Request, { params }: RouteParams) {
   const { id } = await params;
 
   try {
-    const existing = await prisma.transaction.findFirst({
-      where: { id } as never,
-      // Include soft-deleted to restore
-    });
+    // Use $queryRaw to find soft-deleted records (extension auto-filters them)
+    const results = await prisma.$queryRaw<
+      Array<{ id: string; accountId: string; amount: unknown; deletedAt: Date | null }>
+    >`SELECT id, accountId, amount, "deletedAt" FROM "Transaction" WHERE id = ${id}`;
+
+    const existing = results[0];
 
     if (!existing || !existing.deletedAt) {
       return apiError("Transacción no encontrada", 404);
@@ -196,16 +194,21 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     const amount = Number(existing.amount);
 
-    const transaction = await prisma.$transaction([
-      prisma.transaction.restore({ where: { id } }),
-      // Re-apply the balance change
-      prisma.account.update({
-        where: { id: existing.accountId },
-        data: { balance: { increment: amount } },
-      }),
-    ]);
+    await prisma.transaction.restore({ where: { id } });
+    await prisma.account.update({
+      where: { id: existing.accountId },
+      data: { balance: { increment: amount } },
+    });
 
-    return apiSuccess(transaction[0]);
+    const transaction = await prisma.transaction.findFirst({
+      where: { id },
+      include: {
+        account: { select: { id: true, name: true, currencyCode: true } },
+        category: { select: { id: true, name: true, icon: true, color: true } },
+      },
+    });
+
+    return apiSuccess(transaction);
   } catch {
     return apiError("Error al restaurar transacción", 500);
   }

@@ -51,12 +51,12 @@ export async function GET(request: Request) {
         where: { userId: session.user.id },
         select: { id: true },
       });
-      const accountIds = accounts.map((a) => a.id);
+      const accountIds = accounts.map((acc: { id: string }) => acc.id);
       where.accountId = { in: accountIds };
     }
 
     const transactions = await prisma.transaction.findMany({
-      where: { ...where, deletedAt: null } as never,
+      where,
       include: {
         account: { select: { id: true, name: true, currencyCode: true } },
         category: { select: { id: true, name: true, icon: true, color: true } },
@@ -125,7 +125,6 @@ export async function POST(request: Request) {
       }
 
       // Create paired transfer records in a transaction
-      const transferId = crypto.randomUUID();
       const [debitTx, creditTx] = await prisma.$transaction([
         prisma.transaction.create({
           data: {

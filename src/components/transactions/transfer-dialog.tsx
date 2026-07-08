@@ -108,7 +108,7 @@ export function TransferDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label>Cuenta Origen</Label>
-            <Select value={fromAccountId} onValueChange={setFromAccountId}>
+            <Select value={fromAccountId} onValueChange={(v) => setFromAccountId(v ?? "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Desde..." />
               </SelectTrigger>
@@ -127,7 +127,7 @@ export function TransferDialog({
 
           <div className="space-y-2">
             <Label>Cuenta Destino</Label>
-            <Select value={toAccountId} onValueChange={setToAccountId}>
+            <Select value={toAccountId} onValueChange={(v) => setToAccountId(v ?? "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Hacia..." />
               </SelectTrigger>
