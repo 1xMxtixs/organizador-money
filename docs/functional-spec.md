@@ -35,26 +35,26 @@
 
 ## 2. Stack Técnico
 
-| Capa | Tecnología | Justificación |
-|------|-----------|---------------|
-| Framework | Next.js 15 (App Router) | Full-stack TypeScript, SSR, API routes |
-| UI | Tailwind CSS + shadcn/ui | Componentes hermosos, accesibles, copy-paste |
-| Database | Prisma + PostgreSQL | Cloud-first, robusto, backups automáticos |
-| State | Zustand | Ligero, sin boilerplate |
-| Charts | Recharts | Financial visualizations |
+| Capa       | Tecnología                     | Justificación                                     |
+| ---------- | ------------------------------ | ------------------------------------------------- |
+| Framework  | Next.js 15 (App Router)        | Full-stack TypeScript, SSR, API routes            |
+| UI         | Tailwind CSS + shadcn/ui       | Componentes hermosos, accesibles, copy-paste      |
+| Database   | Prisma + PostgreSQL            | Cloud-first, robusto, backups automáticos         |
+| State      | Zustand                        | Ligero, sin boilerplate                           |
+| Charts     | Recharts                       | Financial visualizations                          |
 | Encryption | Web Crypto API + DB encryption | E2E nativo del browser + encriptación en servidor |
-| Testing | Vitest | Rápido, TypeScript native |
-| Auth | NextAuth.js v5 o custom | Autenticación server-side con sesiones seguras |
-| Deployment | Vercel / Railway / Coolify | Deploy fácil, scaling automático |
+| Testing    | Vitest                         | Rápido, TypeScript native                         |
+| Auth       | NextAuth.js v5 o custom        | Autenticación server-side con sesiones seguras    |
+| Deployment | Vercel / Railway / Coolify     | Deploy fácil, scaling automático                  |
 
 ### 2.1 Opciones de Database
 
-| Proveedor | Tier Gratis | Notas |
-|-----------|-------------|-------|
-| **Supabase** | 500MB PostgreSQL | Dashboard bonito, auth incluido, backups |
-| **Neon** | 0.5GB PostgreSQL | Serverless, branching para dev |
-| **Railway** | $5 crédito | PostgreSQL + deploy en el mismo lugar |
-| **Self-hosted** | — | Docker + VPS (como whisper-money) |
+| Proveedor       | Tier Gratis      | Notas                                    |
+| --------------- | ---------------- | ---------------------------------------- |
+| **Supabase**    | 500MB PostgreSQL | Dashboard bonito, auth incluido, backups |
+| **Neon**        | 0.5GB PostgreSQL | Serverless, branching para dev           |
+| **Railway**     | $5 crédito       | PostgreSQL + deploy en el mismo lugar    |
+| **Self-hosted** | —                | Docker + VPS (como whisper-money)        |
 
 ---
 
@@ -64,15 +64,16 @@
 
 **Descripción:** Sistema de autenticación server-side con sesiones seguras.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Login con email/password | Acceso con credenciales (bcrypt/argon2) | MVP |
-| Encriptación maestra | Clave derivada del password para encriptar datos sensibles | MVP |
-| Sesiones seguras | JWT o session cookies con httpOnly | MVP |
-| Bloqueo automático | Bloquear después de X minutos de inactividad | Post-MVP |
-| Multi-device | Acceder desde múltiples dispositivos simultáneamente | MVP |
+| Feature                  | Descripción                                                | Prioridad |
+| ------------------------ | ---------------------------------------------------------- | --------- |
+| Login con email/password | Acceso con credenciales (bcrypt/argon2)                    | MVP       |
+| Encriptación maestra     | Clave derivada del password para encriptar datos sensibles | MVP       |
+| Sesiones seguras         | JWT o session cookies con httpOnly                         | MVP       |
+| Bloqueo automático       | Bloquear después de X minutos de inactividad               | Post-MVP  |
+| Multi-device             | Acceder desde múltiples dispositivos simultáneamente       | MVP       |
 
 **Reglas de negocio:**
+
 - El password NUNCA se almacena en texto plano (bcrypt/argon2)
 - La clave de encriptación se deriva del password (PBKDF2/scrypt)
 - Si se olvida el password, los datos se pierden (diseño intencional — privacy-first)
@@ -83,17 +84,18 @@
 
 **Descripción:** Gestión de múltiples cuentas bancarias y financieras.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Crear cuenta | Nombre, banco, tipo (corriente/ahorro/tarjeta/inversión), moneda | MVP |
-| Editar cuenta | Modificar datos de la cuenta | MVP |
-| Eliminar cuenta | Soft delete (nada se borra realmente) | MVP |
-| Balance actual | Saldo actual de cada cuenta | MVP |
-| Historial de balances | Evolución del saldo en el tiempo | Post-MVP |
-| Multi-moneda | Soporte para diferentes monedas (ARS, USD, EUR, etc.) | Post-MVP |
-| IBAN/CBU | Número de cuenta encriptado | Post-MVP |
+| Feature               | Descripción                                                      | Prioridad |
+| --------------------- | ---------------------------------------------------------------- | --------- |
+| Crear cuenta          | Nombre, banco, tipo (corriente/ahorro/tarjeta/inversión), moneda | MVP       |
+| Editar cuenta         | Modificar datos de la cuenta                                     | MVP       |
+| Eliminar cuenta       | Soft delete (nada se borra realmente)                            | MVP       |
+| Balance actual        | Saldo actual de cada cuenta                                      | MVP       |
+| Historial de balances | Evolución del saldo en el tiempo                                 | Post-MVP  |
+| Multi-moneda          | Soporte para diferentes monedas (ARS, USD, EUR, etc.)            | Post-MVP  |
+| IBAN/CBU              | Número de cuenta encriptado                                      | Post-MVP  |
 
 **Tipos de cuenta:**
+
 - `checking` — Cuenta corriente
 - `savings` — Cuenta de ahorro
 - `credit_card` — Tarjeta de crédito
@@ -103,6 +105,7 @@
 - `real_estate` — Bienes raíces
 
 **Reglas de negocio:**
+
 - Cada cuenta pertenece a un usuario
 - El nombre de la cuenta debe ser único por usuario
 - Eliminar una cuenta NO elimina sus transacciones (soft delete)
@@ -114,18 +117,19 @@
 
 **Descripción:** Registro de ingresos, gastos y transferencias.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Crear transacción | Fecha, monto, descripción, categoría, cuenta | MVP |
-| Editar transacción | Modificar datos | MVP |
-| Eliminar transacción | Soft delete | MVP |
-| Transferencias | Mover dinero entre cuentas | MVP |
-| Importar CSV | Cargar transacciones desde archivo CSV | Post-MVP |
-| Búsqueda | Buscar por descripción, monto, fecha | MVP |
-| Filtros avanzados | Por rango de fechas, categoría, monto, cuenta | MVP |
-| Dedup | Evitar transacciones duplicadas (fingerprint) | Post-MVP |
+| Feature              | Descripción                                   | Prioridad |
+| -------------------- | --------------------------------------------- | --------- |
+| Crear transacción    | Fecha, monto, descripción, categoría, cuenta  | MVP       |
+| Editar transacción   | Modificar datos                               | MVP       |
+| Eliminar transacción | Soft delete                                   | MVP       |
+| Transferencias       | Mover dinero entre cuentas                    | MVP       |
+| Importar CSV         | Cargar transacciones desde archivo CSV        | Post-MVP  |
+| Búsqueda             | Buscar por descripción, monto, fecha          | MVP       |
+| Filtros avanzados    | Por rango de fechas, categoría, monto, cuenta | MVP       |
+| Dedup                | Evitar transacciones duplicadas (fingerprint) | Post-MVP  |
 
 **Campos de una transacción:**
+
 ```
 - id: UUID
 - account_id: UUID (referencia a cuenta)
@@ -142,6 +146,7 @@
 ```
 
 **Reglas de negocio:**
+
 - Todo monto negativo es un gasto, positivo es un ingreso
 - Las transferencias crean DOS transacciones (una en cada cuenta)
 - Las transacciones eliminadas se pueden restaurar
@@ -154,16 +159,17 @@
 
 **Descripción:** Organizar transacciones por categorías con iconos y colores.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Categorías predefinidas | Conjunto inicial de categorías comunes | MVP |
-| Crear categoría | Nombre, icono (emoji), color, tipo | MVP |
-| Editar categoría | Modificar datos | MVP |
-| Eliminar categoría | Soft delete | MVP |
-| Categorías por tipo | income / expense / investment / saving | MVP |
-| Subcategorías | Jerarquía de categorías | Post-MVP |
+| Feature                 | Descripción                            | Prioridad |
+| ----------------------- | -------------------------------------- | --------- |
+| Categorías predefinidas | Conjunto inicial de categorías comunes | MVP       |
+| Crear categoría         | Nombre, icono (emoji), color, tipo     | MVP       |
+| Editar categoría        | Modificar datos                        | MVP       |
+| Eliminar categoría      | Soft delete                            | MVP       |
+| Categorías por tipo     | income / expense / investment / saving | MVP       |
+| Subcategorías           | Jerarquía de categorías                | Post-MVP  |
 
 **Categorías predefinidas:**
+
 ```
 Gastos:
 - 🍔 Alimentación
@@ -189,6 +195,7 @@ Ahorro/Inversión:
 ```
 
 **Reglas de negocio:**
+
 - Cada categoría tiene un tipo (income/expense/investment/saving)
 - Las categorías predefinidas no se pueden eliminar
 - Una categoría eliminada no afecta transacciones existentes
@@ -200,13 +207,14 @@ Ahorro/Inversión:
 
 **Descripción:** Tags flexibles para etiquetar transacciones (many-to-many).
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Crear label | Nombre + color | Post-MVP |
-| Asignar labels | Una o múltiples labels por transacción | Post-MVP |
-| Filtrar por label | Buscar transacciones por label | Post-MVP |
+| Feature           | Descripción                            | Prioridad |
+| ----------------- | -------------------------------------- | --------- |
+| Crear label       | Nombre + color                         | Post-MVP  |
+| Asignar labels    | Una o múltiples labels por transacción | Post-MVP  |
+| Filtrar por label | Buscar transacciones por label         | Post-MVP  |
 
 **Reglas de negocio:**
+
 - Una transacción puede tener múltiples labels
 - Los labels son flexibles (el usuario define los suyos)
 - Un label se puede eliminar sin afectar transacciones
@@ -217,14 +225,15 @@ Ahorro/Inversión:
 
 **Descripción:** Definir límites de gasto por categoría y período.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Crear presupuesto | Categoría + monto límite + período (mensual) | Post-MVP |
-| Tracking de gasto | Cuánto se gastó vs. cuánto quedaba | Post-MVP |
-| Alertas | Notificación cuando se acerca al límite | Post-MVP |
-| Historial | Evolución de presupuestos pasados | Post-MVP |
+| Feature           | Descripción                                  | Prioridad |
+| ----------------- | -------------------------------------------- | --------- |
+| Crear presupuesto | Categoría + monto límite + período (mensual) | Post-MVP  |
+| Tracking de gasto | Cuánto se gastó vs. cuánto quedaba           | Post-MVP  |
+| Alertas           | Notificación cuando se acerca al límite      | Post-MVP  |
+| Historial         | Evolución de presupuestos pasados            | Post-MVP  |
 
 **Reglas de negocio:**
+
 - Un presupuesto es por categoría + período (mensual por defecto)
 - El tracking se calcula sumando transacciones de la categoría en el período
 - Los presupuestos se renuevan automáticamente cada mes
@@ -236,15 +245,16 @@ Ahorro/Inversión:
 
 **Descripción:** Reglas automáticas para categorizar transacciones.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Crear regla | Condición (texto/monto) → Acción (categoría) | Post-MVP |
-| Reglas por texto | Si la descripción contiene "Uber" → Transporte | Post-MVP |
-| Reglas por monto | Si el monto > 10000 → Categoría X | Post-MVP |
-| Aplicar reglas | Al crear/editar transacción | Post-MVP |
-| Sugerencias IA | IA sugiere categoría basada en historial | Future |
+| Feature          | Descripción                                    | Prioridad |
+| ---------------- | ---------------------------------------------- | --------- |
+| Crear regla      | Condición (texto/monto) → Acción (categoría)   | Post-MVP  |
+| Reglas por texto | Si la descripción contiene "Uber" → Transporte | Post-MVP  |
+| Reglas por monto | Si el monto > 10000 → Categoría X              | Post-MVP  |
+| Aplicar reglas   | Al crear/editar transacción                    | Post-MVP  |
+| Sugerencias IA   | IA sugiere categoría basada en historial       | Future    |
 
 **Reglas de negocio:**
+
 - Las reglas se aplican en orden de prioridad
 - Si múltiples reglas matchean, se aplica la de mayor prioridad
 - El usuario puede sobreescribir la categoría sugerida
@@ -256,18 +266,19 @@ Ahorro/Inversión:
 
 **Descripción:** Vista resumen de las finanzas con gráficos y métricas.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Balance general | Suma de todas las cuentas | MVP |
-| Ingresos vs. Gastos | Comparativa mensual | MVP |
-| Gastos por categoría | Pie chart de distribución | MVP |
-| Evolución de balance | Line chart en el tiempo | MVP |
-| Top gastos | Los 10 gastos más grandes del mes | Post-MVP |
-| Net worth | Patrimonio neto (activos - pasivos) | Post-MVP |
-| Comparativa mensual | Mes a mes | Post-MVP |
-| Forecast | Proyección de gastos futuros | Future |
+| Feature              | Descripción                         | Prioridad |
+| -------------------- | ----------------------------------- | --------- |
+| Balance general      | Suma de todas las cuentas           | MVP       |
+| Ingresos vs. Gastos  | Comparativa mensual                 | MVP       |
+| Gastos por categoría | Pie chart de distribución           | MVP       |
+| Evolución de balance | Line chart en el tiempo             | MVP       |
+| Top gastos           | Los 10 gastos más grandes del mes   | Post-MVP  |
+| Net worth            | Patrimonio neto (activos - pasivos) | Post-MVP  |
+| Comparativa mensual  | Mes a mes                           | Post-MVP  |
+| Forecast             | Proyección de gastos futuros        | Future    |
 
 **Métricas del Dashboard:**
+
 ```
 - Balance total (suma de todas las cuentas)
 - Ingresos del mes
@@ -284,20 +295,22 @@ Ahorro/Inversión:
 
 **Descripción:** Todos los datos sensibles se encriptan antes de guardarse.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Encriptación de datos | Descripciones, notas, IBAN encriptados | MVP |
-| Key derivation | Clave derivada del password (PBKDF2) | MVP |
-| Encryption salt | Salt único por usuario | MVP |
-| Encrypted backups | Backups encriptados | Post-MVP |
+| Feature               | Descripción                            | Prioridad |
+| --------------------- | -------------------------------------- | --------- |
+| Encriptación de datos | Descripciones, notas, IBAN encriptados | MVP       |
+| Key derivation        | Clave derivada del password (PBKDF2)   | MVP       |
+| Encryption salt       | Salt único por usuario                 | MVP       |
+| Encrypted backups     | Backups encriptados                    | Post-MVP  |
 
 **Campos encriptados:**
+
 - Transaction.description
 - Transaction.notes
 - Account.iban
 - LoanDetail (todos los campos sensibles)
 
 **Campos NO encriptados (para poder buscar/filtrar):**
+
 - Transaction.amount (necesario para cálculos)
 - Transaction.date (necesario para filtrar)
 - Transaction.type
@@ -305,6 +318,7 @@ Ahorro/Inversión:
 - Category.name
 
 **Reglas de negocio:**
+
 - La encriptación es AES-256-GCM
 - El IV (initialization vector) se genera único por registro
 - La clave se deriva del password con PBKDF2 (100k iteraciones)
@@ -316,12 +330,12 @@ Ahorro/Inversión:
 
 **Descripción:** La app se puede instalar en el celular y funciona como una app nativa. La base de datos vive en el server (PostgreSQL), por lo que offline solo se puede ver contenido cacheado.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Installable | Se puede "instalar" desde el browser | Post-MVP |
-| Push notifications | Recordatorios de vencimientos y alertas | Post-MVP |
-| Service worker | Cache de assets estáticos + UI shell | Post-MVP |
-| Background sync | Sincronizar transacciones offline cuando vuelva la conexión | Future |
+| Feature            | Descripción                                                 | Prioridad |
+| ------------------ | ----------------------------------------------------------- | --------- |
+| Installable        | Se puede "instalar" desde el browser                        | Post-MVP  |
+| Push notifications | Recordatorios de vencimientos y alertas                     | Post-MVP  |
+| Service worker     | Cache de assets estáticos + UI shell                        | Post-MVP  |
+| Background sync    | Sincronizar transacciones offline cuando vuelva la conexión | Future    |
 
 **Nota importante:** A diferencia de una PWA local-first, nuestra app requiere conexión al server para leer/escribir datos. El service worker cachea la UI shell para carga rápida, pero los datos siempre se sincronizan con PostgreSQL en el server.
 
@@ -331,14 +345,15 @@ Ahorro/Inversión:
 
 **Descripción:** Respaldo y exportación de datos.
 
-| Feature | Descripción | Prioridad |
-|---------|------------|-----------|
-| Exportar a JSON | Backup completo en JSON encriptado | MVP |
-| Importar desde JSON | Restaurar desde backup | MVP |
-| Exportar CSV | Exportar transacciones a CSV | Post-MVP |
-| Auto-backup | Backup automático periódico | Future |
+| Feature             | Descripción                        | Prioridad |
+| ------------------- | ---------------------------------- | --------- |
+| Exportar a JSON     | Backup completo en JSON encriptado | MVP       |
+| Importar desde JSON | Restaurar desde backup             | MVP       |
+| Exportar CSV        | Exportar transacciones a CSV       | Post-MVP  |
+| Auto-backup         | Backup automático periódico        | Future    |
 
 **Reglas de negocio:**
+
 - El backup exportado está encriptado con la misma clave del usuario
 - Solo se puede importar un backup encriptado con la clave correcta
 - El backup incluye TODOS los datos (cuentas, transacciones, categorías, etc.)
@@ -370,6 +385,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ### 4.2 Entidades Principales
 
 #### User
+
 ```
 - id: UUID (PK)
 - email: String (encriptado)
@@ -384,6 +400,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### Account
+
 ```
 - id: UUID (PK)
 - user_id: UUID (FK → User)
@@ -400,6 +417,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### Transaction
+
 ```
 - id: UUID (PK)
 - account_id: UUID (FK → Account)
@@ -419,6 +437,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### Category
+
 ```
 - id: UUID (PK)
 - user_id: UUID (FK → User)
@@ -435,6 +454,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### Label
+
 ```
 - id: UUID (PK)
 - user_id: UUID (FK → User)
@@ -446,6 +466,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### TransactionLabel (pivot)
+
 ```
 - transaction_id: UUID (FK → Transaction)
 - label_id: UUID (FK → Label)
@@ -453,6 +474,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### Budget
+
 ```
 - id: UUID (PK)
 - user_id: UUID (FK → User)
@@ -465,6 +487,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### BudgetPeriod
+
 ```
 - id: UUID (PK)
 - budget_id: UUID (FK → Budget)
@@ -476,6 +499,7 @@ BudgetPeriod (1) ──── (N) BudgetTransaction
 ```
 
 #### AutomationRule
+
 ```
 - id: UUID (PK)
 - user_id: UUID (FK → User)
@@ -605,16 +629,16 @@ Features ambiciosas:
 
 ## 8. Decisiones Técnicas Clave
 
-| Decisión | Elección | Justificación |
-|----------|----------|---------------|
-| Database | PostgreSQL (via Prisma) | Cloud-first, robusto, backups automáticos, multi-device |
-| IDs | UUIDs | Previene enumeración, mejor para sync futuro |
-| Soft deletes | Sí | Nada se borra realmente, se puede restaurar |
-| Encriptación | AES-256-GCM | Estándar de la industria, authenticated encryption |
-| Key derivation | PBKDF2 (100k iterations) | Resistente a brute-force |
-| Moneda default | ARS | Target audience: Latinoamérica |
-| Auth | Password + session (NextAuth) | Server-side, seguro, multi-device |
-| Deployment | Vercel / Railway | Deploy fácil, scaling automático, SSL incluido |
+| Decisión       | Elección                      | Justificación                                           |
+| -------------- | ----------------------------- | ------------------------------------------------------- |
+| Database       | PostgreSQL (via Prisma)       | Cloud-first, robusto, backups automáticos, multi-device |
+| IDs            | UUIDs                         | Previene enumeración, mejor para sync futuro            |
+| Soft deletes   | Sí                            | Nada se borra realmente, se puede restaurar             |
+| Encriptación   | AES-256-GCM                   | Estándar de la industria, authenticated encryption      |
+| Key derivation | PBKDF2 (100k iterations)      | Resistente a brute-force                                |
+| Moneda default | ARS                           | Target audience: Latinoamérica                          |
+| Auth           | Password + session (NextAuth) | Server-side, seguro, multi-device                       |
+| Deployment     | Vercel / Railway              | Deploy fácil, scaling automático, SSL incluido          |
 
 ---
 
@@ -643,4 +667,4 @@ Features ambiciosas:
 
 ---
 
-*Documento generado como parte del proceso de planificación del proyecto Finanzas.*
+_Documento generado como parte del proceso de planificación del proyecto Finanzas._
