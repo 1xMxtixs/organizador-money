@@ -18,5 +18,7 @@ export const createCategorySchema = z.object({
 
 export const updateCategorySchema = createCategorySchema.partial();
 
+export type CategoryType = z.infer<typeof categoryTypeEnum>;
+export type CashflowDirection = z.infer<typeof cashflowDirectionEnum>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
