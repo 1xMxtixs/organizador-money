@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión — Finanzas",
@@ -15,10 +17,15 @@ export default function LoginPage() {
           Ingresá tus credenciales para acceder
         </p>
       </div>
-      {/* Login form will be implemented in PR 3 (Auth) */}
-      <div className="rounded-md border border-dashed p-8 text-center text-sm text-muted-foreground">
-        Formulario de login — próximamente
-      </div>
+
+      <LoginForm />
+
+      <p className="text-center text-sm text-muted-foreground">
+        ¿No tenés cuenta?{" "}
+        <Link href="/register" className="text-primary hover:underline">
+          Registrate
+        </Link>
+      </p>
     </div>
   );
 }
