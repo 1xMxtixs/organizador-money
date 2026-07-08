@@ -16,7 +16,7 @@ export function softDeleteExtension() {
   return Prisma.defineExtension({
     name: "softDelete",
     model: {
-      Account: {
+      account: {
         async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
           return (client as any).account.findMany({
@@ -61,7 +61,7 @@ export function softDeleteExtension() {
         },
       },
 
-      Transaction: {
+      transaction: {
         async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
           return (client as any).transaction.findMany({
@@ -106,7 +106,7 @@ export function softDeleteExtension() {
         },
       },
 
-      Category: {
+      category: {
         async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
           return (client as any).category.findMany({
@@ -151,7 +151,7 @@ export function softDeleteExtension() {
         },
       },
 
-      Label: {
+      label: {
         async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
           return (client as any).label.findMany({

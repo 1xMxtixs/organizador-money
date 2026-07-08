@@ -1,7 +1,5 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
-import { prisma } from "./prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -13,6 +11,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
+
+        // Dynamic import to avoid bundling Prisma in Edge Runtime
+        const [{ prisma }, bcrypt] = await Promise.all([
+          import("./prisma"),
+          import("bcrypt"),
+        ]);
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
