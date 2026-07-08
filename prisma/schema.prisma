@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,5 +5,213 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum AccountType {
+  checking
+  savings
+  credit_card
+  investment
+  cash
+  loan
+  real_estate
+}
+
+enum TransactionType {
+  income
+  expense
+  transfer
+}
+
+enum TransactionSource {
+  manual
+  import
+  banking
+}
+
+enum CategoryType {
+  income
+  expense
+  investment
+  saving
+}
+
+enum CashflowDirection {
+  inflow
+  outflow
+}
+
+enum BudgetPeriodType {
+  monthly
+  weekly
+  yearly
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id             String   @id @default(uuid()) @db.Uuid
+  email          String   @unique
+  passwordHash   String
+  encryptionSalt String
+  name           String
+  currencyCode   String   @default("ARS")
+  locale         String   @default("es-AR")
+  timezone       String   @default("America/Argentina/Buenos_Aires")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  accounts        Account[]
+  categories      Category[]
+  labels          Label[]
+  automationRules AutomationRule[]
+  budgets         Budget[]
+}
+
+model Account {
+  id           String      @id @default(uuid()) @db.Uuid
+  userId       String      @db.Uuid
+  name         String
+  bankName     String?
+  type         AccountType
+  currencyCode String      @default("ARS")
+  iban         String? // Encrypted
+  notes        String? // Encrypted
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  deletedAt    DateTime?
+
+  user         User        @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([userId, deletedAt])
+}
+
+model Transaction {
+  id                  String            @id @default(uuid()) @db.Uuid
+  accountId           String            @db.Uuid
+  categoryId          String?           @db.Uuid
+  amount              Decimal           @db.Decimal(15, 2)
+  description         String // Encrypted
+  originalDescription String? // Encrypted
+  date                DateTime
+  type                TransactionType
+  source              TransactionSource @default(manual)
+  transferPairId      String?           @db.Uuid
+  notes               String? // Encrypted
+  dedupFingerprint    String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  deletedAt           DateTime?
+
+  account             Account           @relation(fields: [accountId], references: [id])
+  category            Category?         @relation(fields: [categoryId], references: [id])
+  labels              TransactionLabel[]
+
+  @@index([accountId, deletedAt])
+  @@index([categoryId])
+  @@index([date])
+  @@index([type])
+}
+
+model Category {
+  id                String            @id @default(uuid()) @db.Uuid
+  userId            String            @db.Uuid
+  name              String
+  icon              String // Emoji
+  color             String // Hex
+  type              CategoryType
+  cashflowDirection CashflowDirection
+  isDefault         Boolean           @default(false)
+  sortOrder         Int               @default(0)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  deletedAt         DateTime?
+
+  user              User              @relation(fields: [userId], references: [id])
+  transactions      Transaction[]
+  budgets           Budget[]
+  automationRules   AutomationRule[]
+
+  @@index([userId, deletedAt])
+  @@index([userId, type])
+}
+
+model Label {
+  id           String             @id @default(uuid()) @db.Uuid
+  userId       String             @db.Uuid
+  name         String
+  color        String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  deletedAt    DateTime?
+
+  user         User               @relation(fields: [userId], references: [id])
+  transactions TransactionLabel[]
+
+  @@index([userId, deletedAt])
+}
+
+model TransactionLabel {
+  transactionId String      @db.Uuid
+  labelId       String      @db.Uuid
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  label         Label       @relation(fields: [labelId], references: [id])
+
+  @@id([transactionId, labelId])
+}
+
+model Budget {
+  id          String         @id @default(uuid()) @db.Uuid
+  userId      String         @db.Uuid
+  categoryId  String         @db.Uuid
+  amountLimit Decimal        @db.Decimal(15, 2)
+  period      BudgetPeriodType @default(monthly)
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user        User           @relation(fields: [userId], references: [id])
+  category    Category       @relation(fields: [categoryId], references: [id])
+  periods     BudgetPeriod[]
+
+  @@index([userId])
+  @@index([categoryId])
+}
+
+model BudgetPeriod {
+  id          String   @id @default(uuid()) @db.Uuid
+  budgetId    String   @db.Uuid
+  startsAt    DateTime
+  endsAt      DateTime
+  amountSpent Decimal  @db.Decimal(15, 2) @default(0)
+  isProcessing Boolean @default(false)
+  createdAt   DateTime @default(now())
+
+  budget      Budget   @relation(fields: [budgetId], references: [id])
+
+  @@index([budgetId, startsAt, endsAt])
+}
+
+model AutomationRule {
+  id             String    @id @default(uuid()) @db.Uuid
+  userId         String    @db.Uuid
+  name           String
+  conditionType  String // description_contains | amount_equals | amount_greater | amount_less
+  conditionValue String
+  categoryId     String    @db.Uuid
+  labelId        String?   @db.Uuid
+  priority       Int       @default(0)
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user           User      @relation(fields: [userId], references: [id])
+  category       Category  @relation(fields: [categoryId], references: [id])
+
+  @@index([userId])
 }
