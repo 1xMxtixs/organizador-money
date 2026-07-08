@@ -1,12 +1,17 @@
-import { PrismaClient } from "../generated/prisma";
-import { softDeleteExtension } from "../prisma/middleware/soft-delete";
+import "dotenv/config";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
+import { softDeleteExtension } from "./soft-delete";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined;
 };
 
 function createPrismaClient() {
-  return new PrismaClient().$extends(softDeleteExtension());
+  const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL!,
+  });
+  return new PrismaClient({ adapter }).$extends(softDeleteExtension());
 }
 
 /**

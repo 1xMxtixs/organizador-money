@@ -1,4 +1,5 @@
-import { Prisma } from "../src/generated/prisma";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma } from "../generated/prisma/client";
 
 /**
  * Prisma extension that implements soft delete behavior.
@@ -9,51 +10,51 @@ import { Prisma } from "../src/generated/prisma";
  * - restore: set deletedAt = null (escape hatch)
  *
  * Usage:
- *   const prisma = new PrismaClient().$extends(softDeleteExtension());
+ *   const prisma = new PrismaClient({ adapter }).$extends(softDeleteExtension());
  */
 export function softDeleteExtension() {
   return Prisma.defineExtension({
     name: "softDelete",
     model: {
       Account: {
-        async findMany(args: Prisma.AccountFindManyArgs) {
+        async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findMany({
+          return (client as any).account.findMany({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async findFirst(args: Prisma.AccountFindFirstArgs) {
+        async findFirst(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findFirst({
+          return (client as any).account.findFirst({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async delete(args: Prisma.AccountDeleteArgs) {
+        async delete(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).account.update({
             where: args.where,
             data: { deletedAt: new Date() },
           });
         },
-        async deleteMany(args: Prisma.AccountDeleteManyArgs) {
+        async deleteMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).account.updateMany({
             ...args,
             data: { deletedAt: new Date() },
           });
         },
-        async restore(args: { where: Prisma.AccountWhereUniqueInput }) {
+        async restore(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).account.update({
             where: args.where,
             data: { deletedAt: null },
           });
         },
-        async restoreMany(args: { where: Prisma.AccountWhereInput }) {
+        async restoreMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).account.updateMany({
             where: args.where,
             data: { deletedAt: null },
           });
@@ -61,44 +62,44 @@ export function softDeleteExtension() {
       },
 
       Transaction: {
-        async findMany(args: Prisma.TransactionFindManyArgs) {
+        async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findMany({
+          return (client as any).transaction.findMany({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async findFirst(args: Prisma.TransactionFindFirstArgs) {
+        async findFirst(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findFirst({
+          return (client as any).transaction.findFirst({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async delete(args: Prisma.TransactionDeleteArgs) {
+        async delete(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).transaction.update({
             where: args.where,
             data: { deletedAt: new Date() },
           });
         },
-        async deleteMany(args: Prisma.TransactionDeleteManyArgs) {
+        async deleteMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).transaction.updateMany({
             ...args,
             data: { deletedAt: new Date() },
           });
         },
-        async restore(args: { where: Prisma.TransactionWhereUniqueInput }) {
+        async restore(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).transaction.update({
             where: args.where,
             data: { deletedAt: null },
           });
         },
-        async restoreMany(args: { where: Prisma.TransactionWhereInput }) {
+        async restoreMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).transaction.updateMany({
             where: args.where,
             data: { deletedAt: null },
           });
@@ -106,44 +107,44 @@ export function softDeleteExtension() {
       },
 
       Category: {
-        async findMany(args: Prisma.CategoryFindManyArgs) {
+        async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findMany({
+          return (client as any).category.findMany({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async findFirst(args: Prisma.CategoryFindFirstArgs) {
+        async findFirst(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findFirst({
+          return (client as any).category.findFirst({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async delete(args: Prisma.CategoryDeleteArgs) {
+        async delete(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).category.update({
             where: args.where,
             data: { deletedAt: new Date() },
           });
         },
-        async deleteMany(args: Prisma.CategoryDeleteManyArgs) {
+        async deleteMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).category.updateMany({
             ...args,
             data: { deletedAt: new Date() },
           });
         },
-        async restore(args: { where: Prisma.CategoryWhereUniqueInput }) {
+        async restore(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).category.update({
             where: args.where,
             data: { deletedAt: null },
           });
         },
-        async restoreMany(args: { where: Prisma.CategoryWhereInput }) {
+        async restoreMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).category.updateMany({
             where: args.where,
             data: { deletedAt: null },
           });
@@ -151,44 +152,44 @@ export function softDeleteExtension() {
       },
 
       Label: {
-        async findMany(args: Prisma.LabelFindManyArgs) {
+        async findMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findMany({
+          return (client as any).label.findMany({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async findFirst(args: Prisma.LabelFindFirstArgs) {
+        async findFirst(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).findFirst({
+          return (client as any).label.findFirst({
             ...args,
-            where: { ...args.where, deletedAt: null },
+            where: { ...args?.where, deletedAt: null },
           });
         },
-        async delete(args: Prisma.LabelDeleteArgs) {
+        async delete(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).label.update({
             where: args.where,
             data: { deletedAt: new Date() },
           });
         },
-        async deleteMany(args: Prisma.LabelDeleteManyArgs) {
+        async deleteMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).label.updateMany({
             ...args,
             data: { deletedAt: new Date() },
           });
         },
-        async restore(args: { where: Prisma.LabelWhereUniqueInput }) {
+        async restore(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).update({
+          return (client as any).label.update({
             where: args.where,
             data: { deletedAt: null },
           });
         },
-        async restoreMany(args: { where: Prisma.LabelWhereInput }) {
+        async restoreMany(args: any) {
           const client = Prisma.getExtensionContext(this);
-          return (client as any).updateMany({
+          return (client as any).label.updateMany({
             where: args.where,
             data: { deletedAt: null },
           });
