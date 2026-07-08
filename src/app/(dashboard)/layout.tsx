@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { UserMenu } from "@/components/auth/user-menu";
 
 export default function DashboardLayout({
   children,
@@ -44,11 +45,14 @@ export default function DashboardLayout({
 
       {/* Main content */}
       <div className="flex flex-1 flex-col">
-        {/* Header placeholder */}
-        <header className="flex h-14 items-center border-b px-4 lg:px-6">
-          <span className="text-sm text-muted-foreground">
-            Header — user menu coming soon
+        {/* Header */}
+        <header className="flex h-14 items-center justify-between border-b px-4 lg:px-6">
+          <span className="text-sm text-muted-foreground lg:hidden">
+            💰 Finanzas
           </span>
+          <div className="ml-auto">
+            <UserMenu />
+          </div>
         </header>
 
         <main className="flex-1 p-4 lg:p-6">{children}</main>
