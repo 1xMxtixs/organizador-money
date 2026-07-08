@@ -19,5 +19,6 @@ export const updateTransactionSchema = createTransactionSchema.partial().extend(
   amount: z.number().positive("El monto debe ser positivo").optional(),
 });
 
+export type TransactionType = z.infer<typeof transactionTypeEnum>;
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;

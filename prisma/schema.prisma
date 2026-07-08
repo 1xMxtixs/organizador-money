@@ -77,6 +77,7 @@ model Account {
   bankName     String?
   type         AccountType
   currencyCode String      @default("CLP")
+  balance      Decimal     @default(0) @db.Decimal(15, 2)
   iban         String? // Encrypted
   notes        String? // Encrypted
   isActive     Boolean     @default(true)
