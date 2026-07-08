@@ -56,9 +56,9 @@ async function main() {
       passwordHash: "SYSTEM_USER_DO_NOT_LOGIN",
       encryptionSalt: "SYSTEM",
       name: "Sistema",
-      currencyCode: "ARS",
-      locale: "es-AR",
-      timezone: "America/Argentina/Buenos_Aires",
+      currencyCode: "CLP",
+      locale: "es-CL",
+      timezone: "America/Santiago",
     },
   });
 

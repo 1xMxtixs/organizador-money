@@ -57,9 +57,9 @@ model User {
   passwordHash   String
   encryptionSalt String
   name           String
-  currencyCode   String   @default("ARS")
-  locale         String   @default("es-AR")
-  timezone       String   @default("America/Argentina/Buenos_Aires")
+  currencyCode   String   @default("CLP")
+  locale         String   @default("es-CL")
+  timezone       String   @default("America/Santiago")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -76,7 +76,7 @@ model Account {
   name         String
   bankName     String?
   type         AccountType
-  currencyCode String      @default("ARS")
+  currencyCode String      @default("CLP")
   iban         String? // Encrypted
   notes        String? // Encrypted
   isActive     Boolean     @default(true)
