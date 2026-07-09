@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { UserMenu } from "@/components/auth/user-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function DashboardLayout({
   children,
@@ -11,13 +12,13 @@ export default function DashboardLayout({
       {/* Sidebar placeholder — will be implemented in later PRs */}
       <aside className="hidden w-64 border-r bg-muted/30 lg:block">
         <div className="flex h-14 items-center border-b px-4">
-          <Link href="/dashboard" className="text-lg font-semibold">
+          <Link href="/" className="text-lg font-semibold">
             💰 Finanzas
           </Link>
         </div>
         <nav className="space-y-1 p-2">
           <Link
-            href="/dashboard"
+            href="/"
             className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
           >
             Dashboard
@@ -50,7 +51,8 @@ export default function DashboardLayout({
           <span className="text-sm text-muted-foreground lg:hidden">
             💰 Finanzas
           </span>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
             <UserMenu />
           </div>
         </header>
