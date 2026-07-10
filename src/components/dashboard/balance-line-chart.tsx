@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
@@ -21,6 +21,8 @@ interface BalanceLineChartProps {
 }
 
 export function BalanceLineChart({ data }: BalanceLineChartProps) {
+  const gradientId = "balanceAreaGradient";
+
   return (
     <Card>
       <CardHeader>
@@ -28,21 +30,32 @@ export function BalanceLineChart({ data }: BalanceLineChartProps) {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={data}>
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0} />
+              </linearGradient>
+            </defs>
             <XAxis
               dataKey="month"
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
               tickLine={false}
-              axisLine={false}
+              axisLine={{ stroke: "hsl(var(--border))" }}
             />
             <YAxis
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
               tickLine={false}
-              axisLine={false}
+              axisLine={{ stroke: "hsl(var(--border))" }}
               tickFormatter={(v: number) =>
-                v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`
+                v >= 1000000
+                  ? `${Math.round(v / 1000000)}M`
+                  : v >= 1000
+                  ? `${Math.round(v / 1000)}k`
+                  : `${v}`
               }
               width={50}
+              domain={["auto", "auto"]}
             />
             <Tooltip
               formatter={(value) => formatCurrency(Number(value))}
@@ -51,16 +64,17 @@ export function BalanceLineChart({ data }: BalanceLineChartProps) {
                 border: "1px solid hsl(var(--border))",
                 borderRadius: "8px",
               }}
+              labelFormatter={(month) => `Mes: ${month}`}
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="balance"
-              stroke="hsl(142, 76%, 36%)"
+              stroke="hsl(var(--chart-1))"
               strokeWidth={2}
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
+              fillOpacity={1}
+              fill={`url(#${gradientId})`}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
