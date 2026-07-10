@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryBadge } from "@/components/categories/category-badge";
 import { CategoryForm } from "@/components/categories/category-form";
+import { PageHeader } from "@/components/layout/page-header";
 import type { CategoryType } from "@/lib/validations/category";
 
 interface Category {
@@ -27,7 +28,6 @@ const typeTabs: { value: CategoryType | "all"; label: string }[] = [
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeType, setActiveType] = useState<CategoryType | "all">("all");
   const [formOpen, setFormOpen] = useState(false);
 
@@ -40,8 +40,6 @@ export default function CategoriesPage() {
         if (!cancelled) setCategories(json.data ?? []);
       } catch {
         if (!cancelled) console.error("Error fetching categories");
-      } finally {
-        if (!cancelled) setLoading(false);
       }
     }
     load();
@@ -68,10 +66,12 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Categorías</h1>
+      <PageHeader
+        title="Categorías"
+        description="Gestiona tus categorías de gastos e ingresos"
+      >
         <Button onClick={() => setFormOpen(true)}>Nueva Categoría</Button>
-      </div>
+      </PageHeader>
 
       <div className="flex gap-2">
         {typeTabs.map((tab) => (
@@ -86,11 +86,7 @@ export default function CategoriesPage() {
         ))}
       </div>
 
-      {loading ? (
-        <div className="text-center text-muted-foreground py-8">
-          Cargando categorías...
-        </div>
-      ) : filtered.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="text-center text-muted-foreground py-8">
           No tienes categorías {activeType !== "all" ? "de este tipo" : "creadas"}.
         </div>

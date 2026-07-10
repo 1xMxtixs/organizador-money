@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AccountCard } from "@/components/accounts/account-card";
 import { AccountForm } from "@/components/accounts/account-form";
+import { PageHeader } from "@/components/layout/page-header";
 import { formatCurrency } from "@/lib/utils";
 import type {
   AccountType,
@@ -21,7 +22,6 @@ interface Account {
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [loading, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
@@ -33,8 +33,6 @@ export default function AccountsPage() {
         if (!cancelled) setAccounts(json.data ?? []);
       } catch {
         if (!cancelled) console.error("Error fetching accounts");
-      } finally {
-        if (!cancelled) setLoading(false);
       }
     }
     load();
@@ -68,21 +66,14 @@ export default function AccountsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Cuentas</h1>
-          <p className="text-sm text-muted-foreground">
-            Total: {formatCurrency(totalBalance)}
-          </p>
-        </div>
+      <PageHeader
+        title="Cuentas"
+        description={`Total: ${formatCurrency(totalBalance)}`}
+      >
         <Button onClick={() => setFormOpen(true)}>Nueva Cuenta</Button>
-      </div>
+      </PageHeader>
 
-      {loading ? (
-        <div className="text-center text-muted-foreground py-8">
-          Cargando cuentas...
-        </div>
-      ) : accounts.length === 0 ? (
+      {accounts.length === 0 ? (
         <div className="text-center text-muted-foreground py-8">
           No tienes cuentas creadas. ¡Crea una para comenzar!
         </div>
