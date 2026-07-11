@@ -48,3 +48,6 @@ next-env.d.ts
 .env.production.local
 
 /src/generated/prisma
+
+# docs (reference files, not source)
+docs/*.xlsx
