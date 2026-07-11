@@ -19,28 +19,21 @@ type SeedCategory = {
 
 const DEFAULT_CATEGORIES: SeedCategory[] = [
   // ─── Expense (outflow) ──────────────────────────────────────────────────────
-  { name: "Alimentación", icon: "🍔", color: "#EF4444", type: "expense", cashflowDirection: "outflow", sortOrder: 1 },
-  { name: "Vivienda", icon: "🏠", color: "#F59E0B", type: "expense", cashflowDirection: "outflow", sortOrder: 2 },
-  { name: "Transporte", icon: "🚗", color: "#3B82F6", type: "expense", cashflowDirection: "outflow", sortOrder: 3 },
-  { name: "Entretenimiento", icon: "🎭", color: "#8B5CF6", type: "expense", cashflowDirection: "outflow", sortOrder: 4 },
-  { name: "Ropa", icon: "👕", color: "#EC4899", type: "expense", cashflowDirection: "outflow", sortOrder: 5 },
+  { name: "Vivienda", icon: "🏠", color: "#F59E0B", type: "expense", cashflowDirection: "outflow", sortOrder: 1 },
+  { name: "Suministros", icon: "💡", color: "#F97316", type: "expense", cashflowDirection: "outflow", sortOrder: 2 },
+  { name: "Alimentación", icon: "🍔", color: "#EF4444", type: "expense", cashflowDirection: "outflow", sortOrder: 3 },
+  { name: "Transporte", icon: "🚗", color: "#3B82F6", type: "expense", cashflowDirection: "outflow", sortOrder: 4 },
+  { name: "Ocio", icon: "🎭", color: "#8B5CF6", type: "expense", cashflowDirection: "outflow", sortOrder: 5 },
   { name: "Salud", icon: "💊", color: "#10B981", type: "expense", cashflowDirection: "outflow", sortOrder: 6 },
   { name: "Educación", icon: "📚", color: "#6366F1", type: "expense", cashflowDirection: "outflow", sortOrder: 7 },
-  { name: "Servicios", icon: "💳", color: "#F97316", type: "expense", cashflowDirection: "outflow", sortOrder: 8 },
-  { name: "Otros gastos", icon: "🎁", color: "#6B7280", type: "expense", cashflowDirection: "outflow", sortOrder: 9 },
+  { name: "Mascotas", icon: "🐾", color: "#F59E0B", type: "expense", cashflowDirection: "outflow", sortOrder: 8 },
+  { name: "Impuestos", icon: "🏛️", color: "#6B7280", type: "expense", cashflowDirection: "outflow", sortOrder: 9 },
+  { name: "Suscripciones", icon: "📱", color: "#EC4899", type: "expense", cashflowDirection: "outflow", sortOrder: 10 },
 
   // ─── Income (inflow) ────────────────────────────────────────────────────────
-  { name: "Salario", icon: "💼", color: "#10B981", type: "income", cashflowDirection: "inflow", sortOrder: 10 },
-  { name: "Freelance", icon: "💰", color: "#3B82F6", type: "income", cashflowDirection: "inflow", sortOrder: 11 },
-  { name: "Inversiones", icon: "📈", color: "#8B5CF6", type: "income", cashflowDirection: "inflow", sortOrder: 12 },
-  { name: "Otros ingresos", icon: "🎁", color: "#6B7280", type: "income", cashflowDirection: "inflow", sortOrder: 13 },
-
-  // ─── Saving ─────────────────────────────────────────────────────────────────
-  { name: "Ahorro", icon: "🏦", color: "#10B981", type: "saving", cashflowDirection: "inflow", sortOrder: 14 },
-
-  // ─── Investment ─────────────────────────────────────────────────────────────
-  { name: "Inversión", icon: "📊", color: "#6366F1", type: "investment", cashflowDirection: "inflow", sortOrder: 15 },
-  { name: "Bienes raíces", icon: "🏠", color: "#F59E0B", type: "investment", cashflowDirection: "inflow", sortOrder: 16 },
+  { name: "Sueldo", icon: "💼", color: "#10B981", type: "income", cashflowDirection: "inflow", sortOrder: 11 },
+  { name: "Negocio", icon: "🏢", color: "#3B82F6", type: "income", cashflowDirection: "inflow", sortOrder: 12 },
+  { name: "Otros", icon: "📦", color: "#6B7280", type: "income", cashflowDirection: "inflow", sortOrder: 13 },
 ];
 
 async function main() {

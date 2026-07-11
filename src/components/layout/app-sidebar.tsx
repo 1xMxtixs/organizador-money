@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboardIcon,
+  CalendarIcon,
   LandmarkIcon,
   ArrowLeftRightIcon,
   TagsIcon,
@@ -22,6 +23,7 @@ import {
 
 const navItems = [
   { title: "Dashboard", href: "/", icon: LayoutDashboardIcon },
+  { title: "Mensual", href: "/monthly", icon: CalendarIcon },
   { title: "Cuentas", href: "/accounts", icon: LandmarkIcon },
   { title: "Transacciones", href: "/transactions", icon: ArrowLeftRightIcon },
   { title: "Categorías", href: "/categories", icon: TagsIcon },
