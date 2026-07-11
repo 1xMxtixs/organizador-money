@@ -9,6 +9,8 @@ import {
   TagsIcon,
   PiggyBankIcon,
   TargetIcon,
+  CreditCardIcon,
+  TrendingUpIcon,
 } from "lucide-react";
 import {
   Sidebar,
@@ -25,6 +27,8 @@ const navItems = [
   { title: "Categorías", href: "/categories", icon: TagsIcon },
   { title: "Presupuestos", href: "/budgets", icon: PiggyBankIcon },
   { title: "Metas de Ahorro", href: "/savings-goals", icon: TargetIcon },
+  { title: "Deudas", href: "/debts", icon: CreditCardIcon },
+  { title: "Patrimonio", href: "/net-worth", icon: TrendingUpIcon },
 ] as const;
 
 export function AppSidebar() {

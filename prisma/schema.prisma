@@ -80,6 +80,7 @@ model Account {
   type         AccountType
   currencyCode String      @default("CLP")
   balance      Decimal     @default(0) @db.Decimal(15, 2)
+  interestRate Decimal?    @db.Decimal(5, 2) // Annual interest rate (e.g., 24.99)
   iban         String? // Encrypted
   notes        String? // Encrypted
   isActive     Boolean     @default(true)
