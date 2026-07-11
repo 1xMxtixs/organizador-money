@@ -9,6 +9,7 @@ import { TopCategories } from "@/components/dashboard/top-categories";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { CashflowSummary } from "@/components/dashboard/cashflow-summary";
 import { AccountCards } from "@/components/dashboard/account-cards";
+import { PlanningWidget } from "@/components/dashboard/planning-widget";
 import type { AccountType } from "@/lib/validations/account";
 
 interface SummaryData {
@@ -169,6 +170,8 @@ export function DashboardContent() {
       </div>
 
       <TopCategories categories={topCategories} />
+
+      <PlanningWidget />
 
       <QuickActions />
     </div>
