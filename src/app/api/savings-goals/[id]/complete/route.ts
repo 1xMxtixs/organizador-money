@@ -23,13 +23,12 @@ export async function POST(
       return apiError("Meta de ahorro no encontrada", 404);
     }
 
-    // Toggle completion
-    const isCompleted = !existing.isCompleted;
+    // Always mark as completed (idempotent)
     const goal = await prisma.savingsGoal.update({
       where: { id },
       data: {
-        isCompleted,
-        completedAt: isCompleted ? new Date() : null,
+        isCompleted: true,
+        completedAt: new Date(),
       },
     });
 

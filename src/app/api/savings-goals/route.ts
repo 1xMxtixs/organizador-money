@@ -3,15 +3,23 @@ import { auth } from "@/lib/auth";
 import { createSavingsGoalSchema } from "@/lib/validations/savings-goal";
 import { apiSuccess, apiError } from "@/lib/api-response";
 
-export async function GET() {
+export async function GET(request: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return apiError("No autorizado", 401);
   }
 
   try {
+    const { searchParams } = new URL(request.url);
+    const includeCompleted = searchParams.get("includeCompleted") === "true";
+
+    const where: Record<string, unknown> = { userId: session.user.id };
+    if (!includeCompleted) {
+      where.isCompleted = false;
+    }
+
     const goals = await prisma.savingsGoal.findMany({
-      where: { userId: session.user.id },
+      where,
       include: {
         account: {
           select: { id: true, name: true },
@@ -34,7 +42,7 @@ export async function GET() {
 
         const saved = Number(result._sum.amount ?? 0);
         const target = Number(goal.targetAmount);
-        const progressPercent = target > 0 ? Math.min((saved / target) * 100, 100) : 0;
+        const progressPercent = target > 0 ? (saved / target) * 100 : 0;
 
         return {
           id: goal.id,

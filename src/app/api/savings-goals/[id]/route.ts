@@ -57,7 +57,7 @@ export async function PATCH(
 
     const saved = Number(result._sum.amount ?? 0);
     const target = Number(goal.targetAmount);
-    const progressPercent = target > 0 ? Math.min((saved / target) * 100, 100) : 0;
+    const progressPercent = target > 0 ? (saved / target) * 100 : 0;
 
     return apiSuccess({
       ...goal,
@@ -98,7 +98,7 @@ export async function DELETE(
       where: { id },
     });
 
-    return apiSuccess({ message: "Meta de ahorro eliminada" });
+    return apiSuccess({ deleted: true });
   } catch {
     return apiError("Error al eliminar meta de ahorro", 500);
   }

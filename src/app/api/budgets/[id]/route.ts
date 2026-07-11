@@ -80,7 +80,7 @@ export async function DELETE(
       where: { id },
     });
 
-    return apiSuccess({ message: "Presupuesto eliminado" });
+    return apiSuccess({ deleted: true });
   } catch {
     return apiError("Error al eliminar presupuesto", 500);
   }

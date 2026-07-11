@@ -37,10 +37,17 @@ export async function GET() {
           count
         : 0;
 
+    // Estimate total monthly payments: 2% of balance as default minimum payment
+    const totalMonthlyPayments = activeDebts.reduce(
+      (sum: number, a: { balance: unknown }) => sum + Math.max(0, Number(a.balance)) * 0.02,
+      0,
+    );
+
     return apiSuccess({
       totalDebt,
       count,
       avgInterestRate: Math.round(avgInterestRate * 100) / 100,
+      totalMonthlyPayments: Math.round(totalMonthlyPayments * 100) / 100,
     });
   } catch {
     return apiError("Error al obtener resumen de deudas", 500);

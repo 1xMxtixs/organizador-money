@@ -236,11 +236,13 @@ model SavingsGoal {
   completedAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
   user          User      @relation(fields: [userId], references: [id])
   account       Account   @relation(fields: [accountId], references: [id])
 
   @@index([userId])
   @@index([accountId])
+  @@index([userId, deletedAt])
 }
 
 model NetWorthSnapshot {

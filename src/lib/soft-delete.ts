@@ -13,7 +13,7 @@ import { Prisma } from "../generated/prisma/client";
  *   const prisma = new PrismaClient({ adapter }).$extends(softDeleteExtension());
  */
 export function softDeleteExtension() {
-  const softDeleteModels = ["account", "transaction", "category", "label", "budget"];
+  const softDeleteModels = ["account", "transaction", "category", "label", "budget", "savingsGoal"];
 
   // Query extensions: intercept findMany/findFirst to auto-filter soft-deleted rows
   // Uses the Prisma 7.x { model: { operation: { args, query } } } pattern

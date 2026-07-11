@@ -46,21 +46,22 @@ export async function GET(
     const amountSpent = await computeAmountSpent(id, period.id);
 
     const budgetLimit = Number(budget.amountLimit);
-    const variance = budgetLimit > 0 ? ((amountSpent - budgetLimit) / budgetLimit) * 100 : 0;
-    const variancePercent = Math.round(variance * 100) / 100;
+    const varianceAbsolute = amountSpent - budgetLimit;
+    const variancePercent = budgetLimit > 0 ? ((budgetLimit - amountSpent) / budgetLimit) * 100 : 0;
+    const variance = Math.round(variancePercent * 100) / 100;
 
     let status: "under" | "on-target" | "over" = "under";
     if (amountSpent > budgetLimit) {
       status = "over";
-    } else if (Math.abs(variancePercent) < 1) {
+    } else if (Math.abs(variance) < 1) {
       status = "on-target";
     }
 
     return apiSuccess({
       budgetLimit,
       amountSpent,
-      variance: amountSpent - budgetLimit,
-      variancePercent,
+      varianceAbsolute,
+      variance,
       status,
       period: {
         id: period.id,
