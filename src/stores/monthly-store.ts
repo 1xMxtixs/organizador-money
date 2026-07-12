@@ -13,13 +13,16 @@ interface MonthlyState {
   revertOptimistic: (previousData: MonthlyData) => void;
 }
 
-function currentMonth() {
+export function currentMonth() {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
 
 export const useMonthlyStore = create<MonthlyState>((set, get) => ({
-  month: currentMonth(),
+  // Start empty so SSR and the client's first render produce identical markup.
+  // The real month is resolved client-side only (see monthly-page effect),
+  // avoiding a server/client timezone "month boundary" mismatch on hydration.
+  month: "",
   data: null,
   loading: false,
   error: null,

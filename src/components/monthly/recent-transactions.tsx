@@ -48,7 +48,7 @@ export function RecentTransactions({ transactions }: RecentTransactionsProps) {
             {transactions.map((tx) => (
               <TableRow key={tx.id}>
                 <TableCell className="text-muted-foreground">
-                  {new Date(tx.date).toLocaleDateString("es-CL", {
+                  {new Date(tx.date + "T00:00:00").toLocaleDateString("es-CL", {
                     day: "2-digit",
                     month: "short",
                   })}

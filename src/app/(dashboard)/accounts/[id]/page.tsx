@@ -151,7 +151,7 @@ export default function AccountDetailPage() {
                   <div>
                     <p className="text-sm font-medium">{tx.description}</p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(tx.date).toLocaleDateString("es-CL")}
+                       {new Date(tx.date + "T00:00:00").toLocaleDateString("es-CL")}
                     </p>
                   </div>
                   <p

@@ -4,7 +4,7 @@ import { useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMonthlyStore } from "@/stores/monthly-store";
+import { useMonthlyStore, currentMonth } from "@/stores/monthly-store";
 import { SummaryBar } from "./summary-bar";
 import { MonthNavigator } from "./month-navigator";
 import { ExpenseSection } from "./expense-section";
@@ -19,12 +19,14 @@ export function MonthlyPageClient() {
   const { month, data, loading, error, setMonth, fetchData, optimisticQuickEntry, revertOptimistic } =
     useMonthlyStore();
 
-  // Sync URL → store on mount
+  // Sync URL → store on mount. The store starts with an empty month (set
+  // client-side only) so we always resolve the real month here, after mount,
+  // to keep SSR and first client render identical.
   useEffect(() => {
-    if (urlMonth && urlMonth !== month) {
+    if (urlMonth) {
       setMonth(urlMonth);
-    } else if (!urlMonth) {
-      fetchData();
+    } else {
+      setMonth(currentMonth());
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

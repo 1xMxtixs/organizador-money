@@ -10,13 +10,24 @@ function shiftMonth(month: string, delta: number): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
+const MONTH_NAMES_ES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
+// Locale-data-independent mapping. Avoids Intl/toLocaleDateString so the
+// server (small-icu) and browser never diverge on the rendered month text.
 function formatMonth(month: string): string {
   const [y, m] = month.split("-").map(Number);
-  const d = new Date(y, m - 1);
-  return d.toLocaleDateString("es-CL", { month: "long", year: "numeric" });
+  return `${MONTH_NAMES_ES[m - 1]} de ${y}`;
 }
 
 export function MonthNavigator({ currentMonth, onChange }: MonthNavigatorProps) {
+  // During SSR and the client's first render the store month is "" (resolved
+  // client-side after mount), so render a stable placeholder that matches on
+  // both sides and avoids a hydration text mismatch.
+  const label = currentMonth ? formatMonth(currentMonth) : "—";
+
   return (
     <div className="flex items-center gap-3">
       <Button
@@ -28,7 +39,7 @@ export function MonthNavigator({ currentMonth, onChange }: MonthNavigatorProps) 
         <ChevronLeftIcon className="size-4" />
       </Button>
       <span className="text-lg font-semibold capitalize min-w-[160px] text-center">
-        {formatMonth(currentMonth)}
+        {label}
       </span>
       <Button
         variant="outline"
