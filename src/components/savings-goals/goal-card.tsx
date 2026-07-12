@@ -30,11 +30,18 @@ interface GoalCardProps {
   onComplete: () => void;
 }
 
-function formatDeadline(deadline: string): string {
+// Deadlines are stored as UTC midnight of the intended calendar day.
+// Compare local calendar days so the countdown is correct in any timezone.
+function daysUntilDeadline(deadline: string): number {
+  const d = new Date(deadline);
+  const deadlineCal = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   const now = new Date();
-  const deadlineDate = new Date(deadline);
-  const diffMs = deadlineDate.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const nowCal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((deadlineCal.getTime() - nowCal.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function formatDeadline(deadline: string): string {
+  const diffDays = daysUntilDeadline(deadline);
 
   if (diffDays < 0) return "Vencida";
   if (diffDays === 0) return "Vence hoy";
@@ -43,10 +50,7 @@ function formatDeadline(deadline: string): string {
 }
 
 function deadlineBadgeClass(deadline: string): string {
-  const now = new Date();
-  const deadlineDate = new Date(deadline);
-  const diffMs = deadlineDate.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const diffDays = daysUntilDeadline(deadline);
 
   if (diffDays < 0) return "bg-red-100 text-red-700";
   if (diffDays <= 7) return "bg-yellow-100 text-yellow-700";

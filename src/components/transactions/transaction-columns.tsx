@@ -36,7 +36,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: "Fecha",
     cell: ({ row }) => {
       const date = new Date(row.original.date);
-      return date.toLocaleDateString("es-CL");
+      return date.toLocaleDateString("es-CL", { timeZone: "UTC" });
     },
     enableSorting: true,
   },
